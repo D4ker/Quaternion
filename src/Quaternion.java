@@ -2,7 +2,8 @@ import static java.lang.Math.*;
 
 public final class Quaternion {
 
-    private double w, x, y, z; // Скалярная и векторные части
+    // Компоненты Кватерниона
+    private double w, x, y, z;
 
     // Построение Кватерниона через угол поворота и ось вращения
     public Quaternion(double angle, double x, double y, double z) {
@@ -29,7 +30,7 @@ public final class Quaternion {
         z = 0;
     }
 
-    // Метод-конструктор Кватерниона через комплексные числа
+    // Построение Кватерниона через компоненты
     public Quaternion create(double w, double x, double y, double z) {
         final Quaternion newQ = new Quaternion();
         newQ.w = w;
@@ -44,7 +45,7 @@ public final class Quaternion {
         create(q.w, q.x, q.y, q.z);
     }
 
-    // Описание методов доступа к полям Кватерниона
+    // Описание методов доступа к компонентам (полям) Кватерниона
     public double[] get() {
         return new double[]{w, x, y, z};
     }
@@ -70,7 +71,7 @@ public final class Quaternion {
         return w;
     }
 
-    // Возвращает векторную часть Кватерниона в виде массива
+    // Возвращает компоненты векторной части Кватерниона в виде массива
     public double[] getVector() {
         return new double[]{x, y, z};
     }
@@ -80,7 +81,7 @@ public final class Quaternion {
         return String.format("%+fi%+fj%+fk", x, y, z);
     }
 
-    // Описание методов изменения полей Кватерниона
+    // Описание методов изменения компонент (полей) Кватерниона
     public void setAngle(double angle) {
         w = cos(angle / 2);
     }
