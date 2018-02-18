@@ -21,30 +21,32 @@ public final class Quaternion {
         }
     }
 
-    // Построение Кватерниона на основе уже имеющегося Кватерниона
-    public Quaternion(Quaternion q) {
-        this(q.x, q.y, q.z);
-        w = q.w;
-    }
-
-    // Построение Кватерниона через ось
-    public Quaternion(double x, double y, double z) {
+    // Построение "нулевого" Кватерниона
+    public Quaternion() {
         w = 0;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     // Метод-конструктор Кватерниона через комплексные числа
-    public Quaternion complexQuaternion(double w, double x, double y, double z) {
-        Quaternion newQuaternion = new Quaternion(x, y, z);
-        newQuaternion.w = w;
-        return newQuaternion;
+    public Quaternion create(double w, double x, double y, double z) {
+        final Quaternion newQ = new Quaternion();
+        newQ.w = w;
+        newQ.x = x;
+        newQ.y = y;
+        newQ.z = z;
+        return newQ;
+    }
+
+    // Построение Кватерниона на основе уже имеющегося Кватерниона
+    public Quaternion(Quaternion q) {
+        create(q.w, q.x, q.y, q.z);
     }
 
     // Описание методов доступа к полям Кватерниона
-    public double getAngle() {
-        return 2 * acos(w);
+    public double[] get() {
+        return new double[]{w, x, y, z};
     }
 
     public double getW() {
@@ -83,6 +85,10 @@ public final class Quaternion {
         w = cos(angle / 2);
     }
 
+    public void setW(double w) {
+        this.w = w;
+    }
+
     public void setX(double x) {
         this.x = x;
     }
@@ -97,7 +103,7 @@ public final class Quaternion {
 
     // Возвращает сопряженный Кватернион
     public Quaternion conjugate() {
-        return complexQuaternion(w, -x, -y, -z);
+        return create(w, -x, -y, -z);
     }
 
     // Возвращает модуль Кватерниона
@@ -110,7 +116,7 @@ public final class Quaternion {
         final double module = module();
         if (module == 0) return this;
         final double squareModule = module * module;
-        return complexQuaternion(w / squareModule, -x / squareModule, -y / squareModule, -z / squareModule);
+        return create(w / squareModule, -x / squareModule, -y / squareModule, -z / squareModule);
     }
 
     // Перемножение Кватернионов
@@ -119,29 +125,29 @@ public final class Quaternion {
         final double newX = w * other.x + x * other.w + y * other.z - z * other.y;
         final double newY = w * other.y - x * other.z + y * other.w + z * other.x;
         final double newZ = w * other.z + x * other.y - y * other.x + z * other.w;
-        return complexQuaternion(newW, newX, newY, newZ);
+        return create(newW, newX, newY, newZ);
     }
 
     // Умножение Кватерниона на скаляр
     public Quaternion multiply(double value) {
-        return complexQuaternion(w * value, x * value, y * value, z * value);
+        return create(w * value, x * value, y * value, z * value);
     }
 
     // Сложение Кватернионов
     public Quaternion add(Quaternion other) {
-        return complexQuaternion(w + other.w, x + other.x, y + other.y, z + other.z);
+        return create(w + other.w, x + other.x, y + other.y, z + other.z);
     }
 
     // Вычитание Кватернионов
     public Quaternion deduct(Quaternion other) {
-        return complexQuaternion(w - other.w, x - other.x, y - other.y, z - other.z);
+        return create(w - other.w, x - other.x, y - other.y, z - other.z);
     }
 
     // Нормирование Кватерниона
     public Quaternion normalize() {
         final double length = module();
         if (length == 0) return this;
-        return complexQuaternion(w / length, x / length, y / length, z / length);
+        return create(w / length, x / length, y / length, z / length);
     }
 
     // Сравнение Кватернионов
