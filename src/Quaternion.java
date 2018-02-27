@@ -30,19 +30,22 @@ public final class Quaternion {
         z = 0;
     }
 
+    // Построение Кватерниона на основе уже имеющегося Кватерниона
+    public Quaternion(Quaternion q) {
+        this.w = q.w;
+        this.x = q.x;
+        this.y = q.y;
+        this.z = q.z;
+    }
+
     // Построение Кватерниона через компоненты
-    public Quaternion create(double w, double x, double y, double z) {
+    public static Quaternion create(double w, double x, double y, double z) {
         final Quaternion newQ = new Quaternion();
         newQ.w = w;
         newQ.x = x;
         newQ.y = y;
         newQ.z = z;
         return newQ;
-    }
-
-    // Построение Кватерниона на основе уже имеющегося Кватерниона
-    public Quaternion(Quaternion q) {
-        create(q.w, q.x, q.y, q.z);
     }
 
     // Описание методов доступа к компонентам (полям) Кватерниона
