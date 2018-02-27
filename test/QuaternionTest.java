@@ -77,4 +77,28 @@ public class QuaternionTest {
         assertEquals(1, firstQ.multiply(secondQ).divide().module(), 1e-5);
         assertEquals(0.7071, secondQ.add(thirdQ).divide().module(), 1e-5);
     }
+
+    @Test
+    public void Quaternion() {
+        assertArrayEquals(new double[]{0.7071, 0.7071, 0, 0}, new Quaternion(PI / 2, 1, 0, 0).get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 0, 0}, new Quaternion().get(), 1e-5);
+        assertArrayEquals(firstQ.get(), new Quaternion(firstQ).get(), 1e-5);
+    }
+
+    @Test
+    public void create() {
+        assertArrayEquals(new double[]{0, 0, 1, 0}, Quaternion.create(0, 0, 1, 0).get(), 1e-5);
+        assertArrayEquals(new double[]{1, 1, 0, 0}, Quaternion.create(1, 1, 0, 0).get(), 1e-5);
+        assertArrayEquals(new double[]{0, 1, 0, 0}, Quaternion.create(0, 1, 0, 0).get(), 1e-5);
+    }
+
+    @Test
+    public void setAngle() {
+        firstQ.setAngle(7 * PI / 13);
+        secondQ.setAngle(3 * PI / 2);
+        thirdQ.setAngle(5 * PI);
+        assertArrayEquals(new double[]{0.66312, 0.7071, 0, 0}, firstQ.get(), 1e-5);
+        assertArrayEquals(new double[]{-0.7071, 0, -1, 0}, secondQ.get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 0, 1}, thirdQ.get(), 1e-5);
+    }
 }
