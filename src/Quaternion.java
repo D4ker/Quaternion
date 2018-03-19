@@ -85,10 +85,6 @@ public final class Quaternion {
     }
 
     // Описание методов изменения компонент (полей) Кватерниона
-    public void setAngle(double angle) {
-        w = cos(angle / 2);
-    }
-
     public void setW(double w) {
         this.w = w;
     }
@@ -116,7 +112,7 @@ public final class Quaternion {
     }
 
     // Деление (обращение) Кватерниона
-    public Quaternion divide() {
+    public Quaternion getInverse() {
         final double module = module();
         if (module == 0) return this;
         final double squareModule = module * module;
@@ -163,6 +159,11 @@ public final class Quaternion {
             return w == other.w && x == other.x && y == other.y && z == other.z;
         }
         return false;
+    }
+
+    // Сравнение Кватернионов с погрешностью delta
+    public boolean equals(Quaternion other, double delta) {
+        return abs(x - other.x) < delta && abs(y - other.y) < delta && abs(z - other.z) < delta && abs(w - other.w) < delta;
     }
 
     @Override

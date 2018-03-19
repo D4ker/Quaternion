@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static java.lang.Math.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class QuaternionTest {
     private final Quaternion firstQ = new Quaternion(PI / 2, 1, 0, 0);
@@ -41,12 +43,12 @@ public class QuaternionTest {
     }
 
     @Test
-    public void divide() {
-        assertArrayEquals(new double[]{0.7071, -0.7071, 0, 0}, firstQ.divide().get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, 1, 0}, secondQ.divide().get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, 0, -1}, thirdQ.divide().get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, 0.7071, 0.7071}, firstQ.multiply(secondQ).divide().get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, 0.5, -0.5}, secondQ.add(thirdQ).divide().get(), 1e-5);
+    public void getInverse() {
+        assertArrayEquals(new double[]{0.7071, -0.7071, 0, 0}, firstQ.getInverse().get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 1, 0}, secondQ.getInverse().get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 0, -1}, thirdQ.getInverse().get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 0.7071, 0.7071}, firstQ.multiply(secondQ).getInverse().get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, 0.5, -0.5}, secondQ.add(thirdQ).getInverse().get(), 1e-5);
     }
 
     @Test
@@ -59,23 +61,23 @@ public class QuaternionTest {
     @Test
     public void getVector() {
         assertArrayEquals(new double[]{0.7071, 0, 0}, firstQ.getVector(), 1e-5);
-        assertArrayEquals(new double[]{0, 1, 0}, secondQ.divide().getVector(), 1e-5);
+        assertArrayEquals(new double[]{0, 1, 0}, secondQ.getInverse().getVector(), 1e-5);
         assertArrayEquals(new double[]{0, 0, 1}, thirdQ.normalize().getVector(), 1e-5);
-        assertArrayEquals(new double[]{0, 0.7071, 0.7071}, firstQ.multiply(secondQ).divide().getVector(), 1e-5);
-        assertArrayEquals(new double[]{0, 0.5, -0.5}, secondQ.add(thirdQ).divide().getVector(), 1e-5);
+        assertArrayEquals(new double[]{0, 0.7071, 0.7071}, firstQ.multiply(secondQ).getInverse().getVector(), 1e-5);
+        assertArrayEquals(new double[]{0, 0.5, -0.5}, secondQ.add(thirdQ).getInverse().getVector(), 1e-5);
     }
 
     @Test
     public void conjugate() {
         assertArrayEquals(new double[]{0, 0, 0, -1}, thirdQ.normalize().conjugate().get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, -0.7071, -0.7071}, firstQ.multiply(secondQ).divide().conjugate().get(), 1e-5);
+        assertArrayEquals(new double[]{0, 0, -0.7071, -0.7071}, firstQ.multiply(secondQ).getInverse().conjugate().get(), 1e-5);
     }
 
     @Test
     public void module() {
         assertEquals(1, thirdQ.normalize().module(), 1e-5);
-        assertEquals(1, firstQ.multiply(secondQ).divide().module(), 1e-5);
-        assertEquals(0.7071, secondQ.add(thirdQ).divide().module(), 1e-5);
+        assertEquals(1, firstQ.multiply(secondQ).getInverse().module(), 1e-5);
+        assertEquals(0.7071, secondQ.add(thirdQ).getInverse().module(), 1e-5);
     }
 
     @Test
@@ -93,12 +95,53 @@ public class QuaternionTest {
     }
 
     @Test
-    public void setAngle() {
-        firstQ.setAngle(7 * PI / 13);
-        secondQ.setAngle(3 * PI / 2);
-        thirdQ.setAngle(5 * PI);
-        assertArrayEquals(new double[]{0.66312, 0.7071, 0, 0}, firstQ.get(), 1e-5);
-        assertArrayEquals(new double[]{-0.7071, 0, -1, 0}, secondQ.get(), 1e-5);
-        assertArrayEquals(new double[]{0, 0, 0, 1}, thirdQ.get(), 1e-5);
+    public void equals() {
+        assertEquals(new Quaternion(PI / 2, 1, 0, 0), firstQ);
+        assertEquals(new Quaternion(3 * PI, 0, 1, 0), secondQ);
+        assertTrue(thirdQ.equals(Quaternion.create(0, 0, 0, 1), 1e-5));
+    }
+
+    @Test
+    public void getW() {
+        assertEquals(0.7071, firstQ.getW(), 1e-5);
+    }
+
+    @Test
+    public void getX() {
+        assertEquals(0.7071, firstQ.getX(), 1e-5);
+    }
+
+    @Test
+    public void getY() {
+        assertEquals(0, firstQ.getY());
+    }
+
+    @Test
+    public void getZ() {
+        assertEquals(0, firstQ.getZ());
+    }
+
+    @Test
+    public void setW() {
+        firstQ.setW(1);
+        assertEquals(1, firstQ.getW());
+    }
+
+    @Test
+    public void setX() {
+        firstQ.setX(1);
+        assertEquals(1, firstQ.getX());
+    }
+
+    @Test
+    public void setY() {
+        firstQ.setY(1);
+        assertEquals(1, firstQ.getY());
+    }
+
+    @Test
+    public void setZ() {
+        firstQ.setZ(1);
+        assertEquals(1, firstQ.getZ());
     }
 }
